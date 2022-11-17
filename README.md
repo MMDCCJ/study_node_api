@@ -4,6 +4,6 @@ md还有这么多花样啊
 >套娃
 >>套娃
 >>>dddd
-'''javascript
+```javascript
     ()=>console.log(1);
-'''
+```
