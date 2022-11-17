@@ -7,13 +7,9 @@ const config = require('../config')
 exports.reguser = (req, res) => {
     // 获取客户端提交信息
     const userinfo = req.body
-    // if (!userinfo.username || !userinfo.password) {
-    //     return res.send({ status: 1, message: "用户名或密码不合法" })
-    // }
     const sql = 'SELECT * FROM user_info WHERE username=?'
     db.query(sql, userinfo.username, (err, results) => {
         if (err) {
-            // return res.send({ status: 1, message: err })
             return res.cc(err)
         }
         if (results.length > 0) {
@@ -23,15 +19,12 @@ exports.reguser = (req, res) => {
         const reguserSQL = "INSERT INTO user_info SET ?";
         db.query(reguserSQL, { password: userinfo.password, username: userinfo.username }, (err, results) => {
             if (err) {
-                // return res.send({ status: 1, message: err, t: 1 })
                 return res.cc(err)
             }
             if (results.affectedRows !== 1) {
-                // return res.send({ status: 1, message: "注册失败，请稍后再试" })
                 return res.cc("注册失败,请稍后再试")
             }
             else {
-                // return res.send({ status: 0, message: "注册成功" })
                 return res.cc("注册成功", 0)
             }
         })

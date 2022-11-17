@@ -1,4 +1,5 @@
 const db = require('../db/index');
+// 加密用的捏
 const bcrypt = require('bcryptjs')
 exports.getUserInfo = (req, res) => {
     const sql = "SELECT id,username,nickname,email,user_pic FROM user_info WHERE id=?"
@@ -31,6 +32,7 @@ exports.resetPassword = (req, res) => {
     db.query(sql, req.auth.id, (err, results) => {
         if (err) return res.cc(err)
         if (results.length !== 1) return res.cc(err)
+        // 密码不能重复，旧密码不能错误
         if (!bcrypt.compareSync(userinfo.oldpassword, results[0].password)) return res.cc("密码输入错误")
         if (bcrypt.compareSync(userinfo.newpassword, results[0].password)) return res.cc("新旧密码不能一致")
         const set_new_pwSQL = "UPDATE user_info SET password=? WHERE id=?"
@@ -43,11 +45,12 @@ exports.resetPassword = (req, res) => {
         })
     })
 }
+// 改头像
 exports.update_user_pic = (req, res) => {
     const sql = "UPDATE user_info SET user_pic=? WHERE id=?"
     db.query(sql, [req.body.pic, req.auth.id], (err, results) => {
-        // if (err) return res.cc(err)
-        // if (results.affectedRows != 1) return res.cc("更换失败请重试")
+        if (err) return res.cc(err)
+        if (results.affectedRows != 1) return res.cc("更换失败请重试")
         res.send("成功")
     })
 }

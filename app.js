@@ -11,7 +11,7 @@ const config = require('./config')
 app.use(cors())
 // 解析表单数据中间键
 app.use(express.urlencoded({ extended: false }))
-// 解析Token
+// 方便给客户端发送数据
 app.use((req, res, next) => {
     res.cc = (err, status = 1) => {
         res.send({
@@ -21,6 +21,7 @@ app.use((req, res, next) => {
     }
     next()
 })
+// 解析Token
 app.use(
     expressjwt({
       secret: config.jwtSecretKey,
@@ -29,11 +30,13 @@ app.use(
   );
 // 登录注册
 app.use("/api", userRouter)
+// 上传头像，更新数据
 app.use('/my',userinfoRouter)
-app.get('/', (req, res) => res.send('Hello World!'))
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`)
 })
+// 监听错误
 app.use((err, req, res, next) => {
     if (err instanceof joi.ValidationError) return res.cc(err)
     if (err.name == "UnauthorizedError") return res.cc(err)
