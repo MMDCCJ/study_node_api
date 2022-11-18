@@ -4,6 +4,7 @@ const cors = require('cors')
 const port = 3007
 const userRouter = require("./router/user")
 const userinfoRouter = require("./router/userinfo")
+const artCateRouter = require('./router/artcate')
 const joi = require('joi')
 const {expressjwt} = require('express-jwt')
 const config = require('./config')
@@ -32,7 +33,8 @@ app.use(
 app.use("/api", userRouter)
 // 上传头像，更新数据
 app.use('/my',userinfoRouter)
-
+// 文章接口
+app.use('/my/article',artCateRouter)
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`)
 })
